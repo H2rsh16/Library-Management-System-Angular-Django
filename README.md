@@ -15,7 +15,7 @@
       - open project in "localhost://4200"
      
    2) Backend -
-      - first you have to create database in sqlworkbench with name "library"
+      - first you have to execute database file (Starter.sql)
       - then run this command "python manage.py makemigrations"
       - then run this command "python manage.py migrate"
       - then run Database file
