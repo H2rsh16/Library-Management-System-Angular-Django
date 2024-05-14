@@ -1,0 +1,23 @@
+.container {
+  height: 100%;
+  width: 100%;
+  padding: 50px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+}
+
+.container h1 {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.container table {
+  width: 100%;
+}
+
+.container table tr > * {
+  padding: 20px;
+  text-align: center;
+  border: 1px solid #222;
+}

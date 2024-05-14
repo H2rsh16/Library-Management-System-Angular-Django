@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management</title>
+  </head>
+  <body>
+    <div class="container">
+      <form [formGroup]="form">
+        <h1>Remove Book</h1>
+        <span class="alert" *ngIf="err">{{ msg }}</span>
+        <div class="inputBox">
+          <input
+            formControlName="bname"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Book Name</span>
+        </div>
+        <div class="inputBox">
+          <input
+            formControlName="aname"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Autor Name</span>
+        </div>
+        <p>
+          If want to delete all Books
+          <span (click)="Delete()">Click here</span>
+        </p>
+        <input type="submit" (click)="CheckDetails()" value="Submit" />
+      </form>
+    </div>
+  </body>
+</html>

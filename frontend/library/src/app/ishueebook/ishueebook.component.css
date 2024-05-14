@@ -1,0 +1,118 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+}
+
+.container h1 {
+  text-align: center;
+}
+
+.container form .alert {
+  color: rgb(255, 81, 81);
+  text-align: center;
+}
+
+.container form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 500px;
+  padding: 10px 25px;
+  color: #4f4f4f;
+  background: #fff;
+  border-radius: 10px;
+}
+
+.container form > * {
+  margin: 15px 0;
+}
+
+.container form .inputBox {
+  position: relative;
+  height: 35px;
+  width: 100%;
+  transition: 300ms;
+}
+
+.container form .inputBox input {
+  height: 100%;
+  width: 100%;
+  color: #4f4f4f;
+  padding: 0 10px;
+  border-radius: 5px;
+  outline: none;
+  border: 1px solid #bdbdbd;
+  font-weight: 500;
+}
+
+.container form .inputBox input.date::placeholder {
+  color: #4f4f4f;
+}
+
+.container form .inputBox input:focus {
+  border: 3px solid #3b71ca;
+  outline: none;
+}
+
+.container form .inputBox input:focus ~ span,
+.container form .inputBox input:valid ~ span {
+  top: -2px;
+  font-size: 0.8rem;
+  color: #3b71ca;
+  background: #fff;
+  padding: 0 5px;
+}
+.container form .inputBox input.date:focus ~ span {
+  top: -2px;
+  font-size: 0.8rem;
+  color: #3b71ca;
+  background: #fff;
+  padding: 0 5px;
+}
+
+.container form .inputBox span {
+  position: absolute;
+  color: #4f4f4f;
+  left: 10px;
+  top: 50%;
+  font-size: 0.9rem;
+  transform: translateY(-50%);
+  transition: all 0.3s;
+  pointer-events: none;
+}
+
+.container form .other div span {
+  cursor: pointer;
+  user-select: none;
+}
+
+.container form .other > div {
+  display: flex;
+  gap: 10px;
+}
+
+.container form input[type="submit"] {
+  width: 100%;
+  background: #3b71ca;
+  padding: 7px 20px;
+  font-size: 0.9rem;
+  border: none;
+  outline: none;
+  box-shadow: 1px 2px 20px #3b72ca60;
+  border-radius: 5px;
+  color: #fff;
+  margin-top: 30px;
+  cursor: pointer;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management</title>
+  </head>
+  <body>
+    <div class="container">
+      <form [formGroup]="form">
+        <h1>Registeration</h1>
+        <span class="alert" *ngIf="err">{{ msg }}</span>
+        <div class="inputBox">
+          <input
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            formControlName="name"
+            type="text"
+            required
+          />
+          <span>Name</span>
+        </div>
+        <div class="inputBox">
+          <input
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            formControlName="email"
+            type="text"
+            required
+          />
+          <span>Username</span>
+        </div>
+        <div class="inputBox">
+          <input
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            formControlName="password"
+            type="password"
+            required
+          />
+          <span>Password</span>
+        </div>
+        <div class="inputBox">
+          <input
+            formControlName="cpassword"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="password"
+            required
+          />
+          <span>Confirm Password</span>
+        </div>
+        <div class="type">
+          <select formControlName="type">
+            <option value="student">Student</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <input (click)="CheckDetails()" type="submit" value="Submit" />
+        <span>I have account?<a routerLink="/login">Login</a></span>
+      </form>
+    </div>
+  </body>
+</html>

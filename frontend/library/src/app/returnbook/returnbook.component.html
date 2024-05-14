@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management</title>
+  </head>
+  <body>
+    <div class="container">
+      <form [formGroup]="form">
+        <h1>Return Book</h1>
+        <span class="alert" *ngIf="err">{{ msg }}</span>
+        <div class="inputBox">
+          <input
+            formControlName="bname"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Book Name</span>
+        </div>
+        <div class="inputBox">
+          <input
+            formControlName="aname"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Author Name</span>
+        </div>
+
+        <div class="inputBox">
+          <input
+            formControlName="idate"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            placeholder=""
+            class="date"
+            onfocus="(this.type = 'date')"
+            placeholder="Ishuee Date"
+            required
+          />
+          <span></span>
+        </div>
+        <input type="submit" (click)="CheckDetails()" value="Submit" />
+      </form>
+    </div>
+  </body>
+</html>

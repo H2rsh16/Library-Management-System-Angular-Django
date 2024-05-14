@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+  </head>
+  <body>
+    <nav>
+      <span class="logo">Library Management</span>
+      <div>
+        <span>
+          <i class="bi bi-person-circle"></i>
+          <div class="n">{{ username }}</div>
+        </span>
+        <button class="logoutBtn" (click)="logout()">LogOut</button>
+      </div>
+    </nav>
+    <!-- --------------------------------------------------->
+    <div class="left-div">
+      <div *ngIf="type == 'Admin'">
+        <div
+          class="item active"
+          (click)="DoSomething($event)"
+          routerLink="/dashboardA/home"
+        >
+          <i class="bi bi-house-door"></i>Home
+        </div>
+
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardA/addbooks"
+          class="item"
+        >
+          <i class="bi bi-plus-circle-fill"></i>Add Books
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardA/removebooks"
+          class="item"
+        >
+          <i class="bi bi-trash3-fill"></i>Remove Books
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardA/showstudents"
+          class="item"
+        >
+          <i class="bi bi-info-circle-fill"></i>Student Details
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardA/showishueedbooks"
+          class="item"
+        >
+          <i class="bi bi-list-ul"></i>Ishueed Books
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardA/returnedbooks"
+          class="item"
+        >
+          <i class="bi bi-bag-check-fill"></i>Returned Books
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardA/showbooks"
+          class="item"
+        >
+          <i class="bi bi-bookshelf"></i>Check Books
+        </div>
+      </div>
+
+      <!-- --------------------------------------------------->
+
+      <div *ngIf="type == 'Student'">
+        <div
+          class="item active"
+          (click)="DoSomething($event)"
+          routerLink="/dashboardS/homes"
+        >
+          <i class="bi bi-house-door"></i>Home
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardS/ishueebook"
+          class="item"
+        >
+          <i class="bi bi-book-half"></i>Ishuee Books
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardS/returnbook"
+          class="item"
+        >
+          <i class="bi bi-journal-arrow-up"></i>Return Books
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardS/showbooks"
+          class="item"
+        >
+          <i class="bi bi-bookshelf"></i>Check Books
+        </div>
+        <div
+          (click)="DoSomething($event)"
+          routerLink="/dashboardS/showishueedofone"
+          class="item"
+        >
+          <i class="bi bi-suitcase-fill"></i>Ishueed Books
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <router-outlet></router-outlet>
+    </div>
+  </body>
+</html>

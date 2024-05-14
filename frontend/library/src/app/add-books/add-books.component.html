@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Library Management</title>
+  </head>
+  <body>
+    <div class="container">
+      <form [formGroup]="form">
+        <h1>Add Book</h1>
+        <span class="alert" *ngIf="err">{{ msg }}</span>
+        <div class="inputBox">
+          <input
+            formControlName="name"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Book Name</span>
+        </div>
+        <div class="inputBox">
+          <input
+            formControlName="author"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Author Name</span>
+        </div>
+        <div class="inputBox">
+          <input
+            formControlName="description"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Book Description</span>
+        </div>
+        <div class="inputBox">
+          <input
+            formControlName="category"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="text"
+            required
+          />
+          <span>Book Category</span>
+        </div>
+        <div class="inputBox">
+          <input
+            formControlName="quantity"
+            (focus)="Inputvalidate()"
+            (input)="Inputvalidate()"
+            type="number"
+            required
+          />
+          <span>Book Quantity</span>
+        </div>
+        <input type="submit" (click)="CheckDetails()" value="Submit" />
+      </form>
+    </div>
+  </body>
+</html>
