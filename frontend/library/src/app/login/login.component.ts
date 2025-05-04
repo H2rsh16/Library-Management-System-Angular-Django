@@ -59,36 +59,6 @@ export class LoginComponent implements OnInit {
     return this.http.get('http://localhost:8000/api/user', { withCredentials: true });
   }
 
-  // Submit() {
-  //   this.username = this.form.getRawValue()['email'];
-  //   this.password = this.form.getRawValue()['password'];
-  //   this.http
-  //     .post(
-  //       'http://localhost:8000/api/login',
-  //       {
-  //         email: this.username,
-  //         password: this.password,
-  //       },
-  //       { withCredentials: true }
-  //     )
-  //     .subscribe((res: any) => {
-  //       if (res == 'Data is invalid') {
-  //         this.err = true;
-  //         this.msg = res;
-  //       } else if (res == 'Incorrect Password') {
-  //         this.err = true;
-  //         this.msg = res;
-  //       } else {
-  //         AuthInterceptor.accessToken = res.token;
-  //         localStorage.setItem('LoggedIn', 'true');
-  //         this.CheckUserRoll();
-  //       };
-  //     });
-  // }
-  CheckUserRoll(): Observable<any> {
-    return this.http.get('http://localhost:8000/api/user', { withCredentials: true });
-  }
-
   Submit() {
     this.username = this.form.getRawValue()['email'];
     this.password = this.form.getRawValue()['password'];
@@ -125,22 +95,5 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-<<<<<<< HEAD
-  
-  
 
-  // CheckUserRoll() {
-  //   this.http
-  // .get('http://localhost:8000/api/user', { withCredentials: true })
-  // .subscribe((res: any) => {
-  //   this.type = res.type;
-  //   if (this.type == 'Admin') {
-  //     this.router.navigate(['/dashboardA']);
-  //   } else if (this.type == 'Student') {
-  //     this.router.navigate(['/dashboardS']);
-  //   }
-  // });
-  // }
-=======
->>>>>>> 93d82b4f069abbd5e4a45a8113081eb1aba80287
 }
