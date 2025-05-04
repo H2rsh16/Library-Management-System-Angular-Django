@@ -4,3 +4,4 @@ django-cors-headers
 mysqlclient
 django-cors-headers
 gunicorn
+pyjwt
