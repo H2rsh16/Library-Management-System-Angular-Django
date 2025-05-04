@@ -7,7 +7,7 @@ urlpatterns = [
     path("addbook", RegisterBookView.as_view()),
     path("showbook", ShowBookView.as_view()),
     path("showstudents", ShowStudentsView.as_view()),
-    path("showishueedbook", ShowIssuedBookView.as_view()),
+    path("showishueedbook", ShowIssueedBookView.as_view()),
     path("showreturnedbook", ShowReturnedBooks.as_view()),
     path("showishueedofone/<str:studentname>", ShowIshueedOfOne.as_view()),
     path("changequantity/<str:bookname>,<str:authorname>", UpdateQuantity.as_view()),
