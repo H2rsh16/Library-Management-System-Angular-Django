@@ -33,7 +33,7 @@ export class ReturnbookComponent implements OnInit {
     });
 
     this.http
-      .get('http://localhost:8000/api/user', { withCredentials: true })
+      .get('https://library-management-system-angular-django.onrender.com/api/user', { withCredentials: true })
       .subscribe((res: any) => {
         this.username = res.name;
       });
@@ -83,7 +83,7 @@ export class ReturnbookComponent implements OnInit {
 
     this.http
       .get(
-        'http://localhost:8000/api/checkreturnbook/' +
+        'https://library-management-system-angular-django.onrender.com/api/checkreturnbook/' +
           this.name +
           ',' +
           this.username
@@ -93,7 +93,7 @@ export class ReturnbookComponent implements OnInit {
           if (res) {
             this.http
               .delete(
-                'http://localhost:8000/api/returnishueedbook/' +
+                'https://library-management-system-angular-django.onrender.com/api/returnishueedbook/' +
                   this.name +
                   ',' +
                   newStri
@@ -102,7 +102,7 @@ export class ReturnbookComponent implements OnInit {
                 () => {
                   this.ChangeQuantity();
                   this.http
-                    .post('http://localhost:8000/api/savereturnedbook', {
+                    .post('https://library-management-system-angular-django.onrender.com/api/savereturnedbook', {
                       bookname: this.name,
                       studentname: this.username,
                       ishueed: newStri,
@@ -124,7 +124,7 @@ export class ReturnbookComponent implements OnInit {
   ChangeQuantity() {
     this.http
       .get(
-        'http://localhost:8000/api/changequantity/' +
+        'https://library-management-system-angular-django.onrender.com/api/changequantity/' +
           this.name +
           ',' +
           this.author,
@@ -136,7 +136,7 @@ export class ReturnbookComponent implements OnInit {
           this.temp = this.q + 1;
           this.http
             .patch(
-              'http://localhost:8000/api/changequantity/' +
+              'https://library-management-system-angular-django.onrender.com/api/changequantity/' +
                 this.name +
                 ',' +
                 this.author,

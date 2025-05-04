@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
   }
   
   CheckUserRoll(): Observable<any> {
-    return this.http.get('http://localhost:8000/api/user', { withCredentials: true });
+    return this.http.get('https://library-management-system-angular-django.onrender.com/api/user', { withCredentials: true });
   }
 
   Submit() {
@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
     this.password = this.form.getRawValue()['password'];
   
     this.http.post(
-      'http://localhost:8000/api/login',
+      'https://library-management-system-angular-django.onrender.com/api/login',
       {
         email: this.username,
         password: this.password,
@@ -95,5 +95,4 @@ export class LoginComponent implements OnInit {
       }
     });
   }
-
 }

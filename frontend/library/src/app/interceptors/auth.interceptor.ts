@@ -30,7 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
         if (err.status == 401) {
           return this.http
             .post(
-              'http://localhost:8000/api/refresh',
+              'https://library-management-system-angular-django.onrender.com/api/refresh',
               {},
               { withCredentials: true }
             )

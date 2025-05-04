@@ -17,7 +17,7 @@ export class ReturnedbooksComponent implements OnInit {
 
   ShowData() {
     this.http
-      .get('http://localhost:8000/api/showreturnedbook')
+      .get('https://library-management-system-angular-django.onrender.com/api/showreturnedbook')
       .subscribe((res: any) => {
         this.Data = res;
       });

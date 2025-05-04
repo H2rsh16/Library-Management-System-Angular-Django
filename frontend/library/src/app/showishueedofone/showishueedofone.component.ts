@@ -17,7 +17,7 @@ export class ShowishueedofoneComponent implements OnInit {
 
   ShowData() {
     this.http
-      .get('http://localhost:8000/api/user', { withCredentials: true })
+      .get('https://library-management-system-angular-django.onrender.com/api/user', { withCredentials: true })
       .subscribe((res: any) => {
         this.http
           .get('http://localhost:8000/api/showishueedofone/' + res.name)

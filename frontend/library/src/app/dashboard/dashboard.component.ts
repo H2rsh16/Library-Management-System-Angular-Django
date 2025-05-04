@@ -18,7 +18,7 @@ export class DashboardComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.http.get('http://localhost:8000/api/user', { withCredentials: true })
+    this.http.get('https://library-management-system-angular-django.onrender.com/api/user', { withCredentials: true })
       .subscribe({
         next: (res: any) => {
           this.username = res.name;
@@ -33,7 +33,7 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.http.post('http://localhost:8000/api/logout', {}, { withCredentials: true })
+    this.http.post('https://library-management-system-angular-django.onrender.com/api/logout', {}, { withCredentials: true })
       .subscribe({
         next: () => {
           localStorage.removeItem('LoggedIn');

@@ -55,7 +55,7 @@ export class RemovebookComponent implements OnInit {
     this.author = this.form.getRawValue()['aname'];
     this.http
       .delete(
-        'http://localhost:8000/api/removebook/' + this.name + ',' + this.author
+        'https://library-management-system-angular-django.onrender.com/api/removebook/' + this.name + ',' + this.author
       )
       .subscribe(
         () => {
@@ -74,13 +74,13 @@ export class RemovebookComponent implements OnInit {
   }
 
   RemoveAllBooks() {
-    this.http.get('http://localhost:8000/api/showbook').subscribe(
+    this.http.get('https://library-management-system-angular-django.onrender.com/api/showbook').subscribe(
       (res: any) => {
         if (res == '') {
           alert('Books are Empty!!');
         } else {
           this.http
-            .delete('http://localhost:8000/api/removeallbooks')
+            .delete('https://library-management-system-angular-django.onrender.com/api/removeallbooks')
             .subscribe(
               () => {
                 alert('All Books are Deleted');

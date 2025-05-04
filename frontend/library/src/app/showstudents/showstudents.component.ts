@@ -16,7 +16,7 @@ export class ShowstudentsComponent implements OnInit {
   }
 
   ShowData() {
-    this.http.get('http://localhost:8000/api/showstudents').subscribe(
+    this.http.get('https://library-management-system-angular-django.onrender.com/api/showstudents').subscribe(
       (res: any) => {
         this.Data = res;
       },

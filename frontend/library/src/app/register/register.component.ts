@@ -83,7 +83,7 @@ export class RegisterComponent implements OnInit {
     this.password = this.form.getRawValue()['password'];
     this.type = this.form.getRawValue()['type'];
     this.http
-      .post('http://localhost:8000/api/register', {
+      .post('https://library-management-system-angular-django.onrender.com/api/register', {
         name: this.name,
         email: this.username,
         password: this.password,

@@ -106,7 +106,7 @@ export class IshueebookComponent {
     if (this.name != '' && this.author != '') {
       this.http
         .get(
-          'http://localhost:8000/api/checkishueebook/' +
+          'https://library-management-system-angular-django.onrender.com/api/checkishueebook/' +
             this.name +
             ',' +
             this.author
@@ -142,10 +142,10 @@ export class IshueebookComponent {
     let newStrr = partsr[2] + '-' + partsr[1] + '-' + partsr[0];
 
     this.http
-      .get('http://localhost:8000/api/user', { withCredentials: true })
+      .get('https://library-management-system-angular-django.onrender.com/api/user', { withCredentials: true })
       .subscribe((res: any) => {
         this.http
-          .post('http://localhost:8000/api/ishueebook', {
+          .post('https://library-management-system-angular-django.onrender.com/api/ishueebook', {
             bookname: this.name,
             studentname: res.name,
             ishueed: newStri,
@@ -162,7 +162,7 @@ export class IshueebookComponent {
   ChangeQuantity() {
     this.http
       .get(
-        'http://localhost:8000/api/changequantity/' +
+        'https://library-management-system-angular-django.onrender.com/api/changequantity/' +
           this.name +
           ',' +
           this.author
@@ -172,7 +172,7 @@ export class IshueebookComponent {
         this.temp = this.q - 1;
         this.http
           .patch(
-            'http://localhost:8000/api/changequantity/' +
+            'https://library-management-system-angular-django.onrender.com/api/changequantity/' +
               this.name +
               ',' +
               this.author,

@@ -163,7 +163,7 @@ export class AddBooksComponent implements OnInit {
     this.category = this.form.getRawValue()['category'];
     this.quantity = this.form.getRawValue()['quantity'];
     this.http
-      .post('http://localhost:8000/api/addbook', {
+      .post('https://library-management-system-angular-django.onrender.com/api/addbook', {
         bookname: this.name,
         authorname: this.author,
         bookdescription: this.description,
@@ -172,8 +172,7 @@ export class AddBooksComponent implements OnInit {
       })
       .subscribe(
         (result) => {
-          // Handle result
-          // console.log(result);
+          
         },
         (error) => {
           if (error) {
@@ -182,8 +181,7 @@ export class AddBooksComponent implements OnInit {
           }
         },
         () => {
-          // 'onCompleted' callback.
-          // No errors, route to new page here
+         
           alert('Book Added Successfully');
           this.form.reset();
         }

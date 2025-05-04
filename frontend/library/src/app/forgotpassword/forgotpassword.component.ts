@@ -89,7 +89,7 @@ export class ForgotpasswordComponent implements OnInit {
     if (this.name != '' && this.username != '' && this.password != '') {
       this.http
         .get(
-          'http://localhost:8000/api/forgotpassword/' +
+          'https://library-management-system-angular-django.onrender.com/api/forgotpassword/' +
             this.name +
             ',' +
             this.username

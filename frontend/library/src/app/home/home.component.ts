@@ -17,29 +17,29 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.http
-      .get('http://localhost:8000/api/user', { withCredentials: true })
+      .get('https://library-management-system-angular-django.onrender.com/api/user', { withCredentials: true })
       .subscribe((res: any) => {
         this.type = res.type;
       });
     this.http
-      .get('http://localhost:8000/api/bookscount', { withCredentials: true })
+      .get('https://library-management-system-angular-django.onrender.com/api/bookscount', { withCredentials: true })
       .subscribe((res: any) => {
         this.noBooks = res;
       });
     this.http
-      .get('http://localhost:8000/api/studentscount', { withCredentials: true })
+      .get('https://library-management-system-angular-django.onrender.com/api/studentscount', { withCredentials: true })
       .subscribe((res: any) => {
         this.noStudents = res;
       });
     this.http
-      .get('http://localhost:8000/api/returnedbookscount', {
+      .get('https://library-management-system-angular-django.onrender.com/api/returnedbookscount', {
         withCredentials: true,
       })
       .subscribe((res: any) => {
         this.noReturnedBooks = res;
       });
     this.http
-      .get('http://localhost:8000/api/ishueedbookscount', {
+      .get('https://library-management-system-angular-django.onrender.com/api/ishueedbookscount', {
         withCredentials: true,
       })
       .subscribe((res: any) => {
