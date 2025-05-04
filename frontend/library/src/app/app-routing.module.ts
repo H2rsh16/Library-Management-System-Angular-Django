@@ -8,7 +8,6 @@ import { HomeComponent } from './home/home.component';
 import { AddBooksComponent } from './add-books/add-books.component';
 import { RemovebookComponent } from './removebook/removebook.component';
 import { IshueebookComponent } from './ishueebook/ishueebook.component';
-import { ReturnStatement } from '@angular/compiler';
 import { ReturnbookComponent } from './returnbook/returnbook.component';
 import { HomeSComponent } from './home-s/home-s.component';
 import { ShowbooksComponent } from './showbooks/showbooks.component';
@@ -19,7 +18,6 @@ import { ReturnedbooksComponent } from './returnedbooks/returnedbooks.component'
 import { AuthGuard } from './auth.guard';
 
 const routes: Routes = [
-  { path: '', component: LoginComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   {

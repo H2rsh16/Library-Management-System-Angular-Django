@@ -5,7 +5,9 @@ from rest_framework.response import Response
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework import *
 from library.serializers import *
-import jwt, datetime
+from library.models import *
+import jwt
+import datetime
 
 
 # Create your views here.
@@ -170,16 +172,19 @@ class SaveReturnedBook(APIView):
 
 class LoginUserView(APIView):
     def post(self, request):
-        email = request.data["email"]
-        password = request.data["password"]
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response({"error": "Email and password are required"}, status=400)
 
         user = User.objects.filter(email=email).first()
 
         if user is None:
-            return Response("Data is invalid")
+            return Response({"error": "Invalid credentials"}, status=401)
         
         if not user.check_password(password):
-            return Response('Incorrect Password')
+            return Response({"error": "Invalid credentials"}, status=401)
 
         payload = {
             "id": user.id,
@@ -189,11 +194,14 @@ class LoginUserView(APIView):
 
         token = jwt.encode(payload, "secret", algorithm="HS256")
 
-        response = Response()
-
-        response.set_cookie(key="jwt", value=token, httponly=True)
-
-        response.data = {"jwt": token}
+        response = Response({"jwt": token})
+        response.set_cookie(
+            key="jwt",
+            value=token,
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+        )
 
         return response
 

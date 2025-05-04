@@ -1,0 +1,5 @@
+djangorestframework
+Django
+jwt
+mysql
+django-cors-headers
