@@ -54,6 +54,10 @@ export class LoginComponent implements OnInit {
   Inputvalidate() {
     this.err = false;
   }
+  
+  CheckUserRoll(): Observable<any> {
+    return this.http.get('http://localhost:8000/api/user', { withCredentials: true });
+  }
 
   // Submit() {
   //   this.username = this.form.getRawValue()['email'];
@@ -121,6 +125,7 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+<<<<<<< HEAD
   
   
 
@@ -136,4 +141,6 @@ export class LoginComponent implements OnInit {
   //   }
   // });
   // }
+=======
+>>>>>>> 93d82b4f069abbd5e4a45a8113081eb1aba80287
 }
