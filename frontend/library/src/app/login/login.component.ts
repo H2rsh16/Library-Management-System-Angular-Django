@@ -80,9 +80,9 @@ export class LoginComponent implements OnInit {
   
         this.CheckUserRoll().subscribe((userRes: any) => {
           this.type = userRes.type;
-          if (this.type == 'admin') {
+          if (this.type == 'Admin') {
             this.router.navigate(['/dashboardA']);
-          } else if (this.type == 'student') {
+          } else if (this.type == 'Student') {
             this.router.navigate(['/dashboardS']);
           } else {
             this.err = true;
