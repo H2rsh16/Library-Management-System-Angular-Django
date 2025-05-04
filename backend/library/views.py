@@ -1,231 +1,177 @@
-from django.shortcuts import render
+import os
+import jwt
+import datetime
+from django.shortcuts import render, get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
-from .serializers import UserSerializer, BookSerializer, IshueedBookSerializer, ReturnedBookSerializer
-from .models import User, Books, IshueedBooks, ReturnedBooks
-import jwt, datetime
+from rest_framework import status
+from library.serializers import *
+from library.models import *
 
-# Register User
+# Get the secret key from environment variable
+JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-production-secret")
+
+# Helper to get authenticated user from JWT token
+def get_authenticated_user(request):
+    token = request.COOKIES.get("jwt")
+    if not token:
+        raise AuthenticationFailed("Unauthenticated")
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        raise AuthenticationFailed("Token expired")
+    except jwt.InvalidTokenError:
+        raise AuthenticationFailed("Invalid token")
+    return get_object_or_404(User, id=payload["id"])
+
 class RegisterUserView(APIView):
     def post(self, request):
-        user = UserSerializer(data=request.data)
-        if user.is_valid():
-            user.save()
-            return Response(user.data, status=status.HTTP_201_CREATED)
-        return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = UserSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-# Register Book
 class RegisterBookView(APIView):
     def post(self, request):
-        book = BookSerializer(data=request.data)
-        if book.is_valid():
-            book.save()
-            return Response(book.data, status=status.HTTP_201_CREATED)
-        return Response(book.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = BookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-# Show All Books
 class ShowBookView(APIView):
     def get(self, request):
-        query = Books.objects.all()
-        serializer = BookSerializer(query, many=True)
+        books = Books.objects.all()
+        serializer = BookSerializer(books, many=True)
         return Response(serializer.data)
 
-
-# Show All Students
 class ShowStudentsView(APIView):
     def get(self, request):
-        query = User.objects.filter(type="Student")
-        serializer = UserSerializer(query, many=True)
+        students = User.objects.filter(type="Student")
+        serializer = UserSerializer(students, many=True)
         return Response(serializer.data)
 
-
-# Show Issued Books
-class ShowIshueedBookView(APIView):
+class ShowIssuedBookView(APIView):
     def get(self, request):
-        query = IshueedBooks.objects.all()
-        serializer = IshueedBookSerializer(query, many=True)
+        issued_books = IssuedBooks.objects.all()
+        serializer = IssuedBookSerializer(issued_books, many=True)
         return Response(serializer.data)
 
-
-# Show Issued Books of One Student
-class ShowIshueedOfOne(APIView):
+class ShowIssuedOfOne(APIView):
     def get(self, request, studentname):
-        query = IshueedBooks.objects.filter(studentname=studentname)
-        serializer = IshueedBookSerializer(query, many=True)
+        issued_books = IssuedBooks.objects.filter(studentname=studentname)
+        serializer = IssuedBookSerializer(issued_books, many=True)
         return Response(serializer.data)
 
-
-# Show Returned Books
 class ShowReturnedBooks(APIView):
     def get(self, request):
-        query = ReturnedBooks.objects.all()
-        serializer = ReturnedBookSerializer(query, many=True)
+        returned_books = ReturnedBooks.objects.all()
+        serializer = ReturnedBookSerializer(returned_books, many=True)
         return Response(serializer.data)
 
-
-# Remove Specific Book
 class RemoveBook(APIView):
     def delete(self, request, bookname, authorname):
-        try:
-            bname = Books.objects.get(bookname=bookname, authorname=authorname)
-            bname.delete()
-            return Response("Book Deleted Successfully")
-        except Books.DoesNotExist:
-            return Response("Book not found", status=status.HTTP_404_NOT_FOUND)
+        book = get_object_or_404(Books, bookname=bookname, authorname=authorname)
+        book.delete()
+        return Response({"message": "Book Deleted Successfully"}, status=status.HTTP_204_NO_CONTENT)
 
-
-# Remove All Books
 class RemoveAllBooks(APIView):
     def delete(self, request):
         Books.objects.all().delete()
-        return Response("All Books Deleted Successfully")
+        return Response({"message": "All Books Deleted Successfully"}, status=status.HTTP_204_NO_CONTENT)
 
-
-# Check Book for Issuance
-class CheckBookforIshuee(APIView):
+class CheckBookForIssue(APIView):
     def get(self, request, bookname, authorname):
-        try:
-            bookdata = Books.objects.get(bookname=bookname, authorname=authorname)
-            serializer = BookSerializer(bookdata)
-            return Response(serializer.data)
-        except Books.DoesNotExist:
-            return Response("Book not found", status=status.HTTP_404_NOT_FOUND)
+        book = get_object_or_404(Books, bookname=bookname, authorname=authorname)
+        serializer = BookSerializer(book)
+        return Response(serializer.data)
 
-
-# Check Book for Return
-class CheckBookforReturn(APIView):
+class CheckBookForReturn(APIView):
     def get(self, request, bookname, studentname):
-        bookdata = IshueedBooks.objects.filter(bookname=bookname, studentname=studentname).first()
-        if bookdata:
-            serializer = IshueedBookSerializer(bookdata)
-            return Response(serializer.data)
-        return Response("Book not found or not issued to this student", status=status.HTTP_404_NOT_FOUND)
+        book = IssuedBooks.objects.filter(bookname=bookname, studentname=studentname).first()
+        if not book:
+            return Response({"error": "No such book issued"}, status=status.HTTP_404_NOT_FOUND)
+        serializer = IssuedBookSerializer(book)
+        return Response(serializer.data)
 
-
-# Check Book Count
 class CheckBookCount(APIView):
     def get(self, request):
-        aBook = Books.objects.all().count()
-        return Response(aBook)
+        count = Books.objects.count()
+        return Response({"book_count": count})
 
-
-# Check Student Count
 class CheckStudentCount(APIView):
     def get(self, request):
-        aStudent = User.objects.filter(type="Student").count()
-        return Response(aStudent)
+        count = User.objects.filter(type="Student").count()
+        return Response({"student_count": count})
 
-
-# Check Issued Book Count
-class CheckIshueedBookCount(APIView):
+class CheckIssuedBookCount(APIView):
     def get(self, request):
-        aIshueedBook = IshueedBooks.objects.all().count()
-        return Response(aIshueedBook)
+        count = IssuedBooks.objects.count()
+        return Response({"issued_book_count": count})
 
-
-# Check Returned Book Count
 class CheckReturnedBookCount(APIView):
     def get(self, request):
-        aReturnedBook = ReturnedBooks.objects.all().count()
-        return Response(aReturnedBook)
+        count = ReturnedBooks.objects.count()
+        return Response({"returned_book_count": count})
 
-
-# Issue A Book
-class IshueeABook(APIView):
+class IssueABook(APIView):
     def post(self, request):
-        bookdata = IshueedBookSerializer(data=request.data)
-        if bookdata.is_valid():
-            bookdata.save()
-            return Response(bookdata.data, status=status.HTTP_201_CREATED)
-        return Response(bookdata.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = IssuedBookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-
-# Update User Password
-class UpdatePassword(APIView):
-    def get(self, request, name, email):
-        try:
-            user = User.objects.get(name=name, email=email)
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    def patch(self, request, name, email):
-        try:
-            user = User.objects.get(name=name, email=email)
-            serializer = UserSerializer(user, data=request.data, partial=True)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except User.DoesNotExist:
-            return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
-
-# Update Book Quantity
-class UpdateQuantity(APIView):
-    def get(self, request, bookname, authorname):
-        try:
-            book = Books.objects.filter(bookname=bookname, authorname=authorname).first()
-            if book:
-                serializer = BookSerializer(book)
-                return Response(serializer.data["quantity"])
-            return Response("Book not found", status=status.HTTP_404_NOT_FOUND)
-        except Books.DoesNotExist:
-            return Response("Book not found", status=status.HTTP_404_NOT_FOUND)
-
-    def patch(self, request, bookname, authorname):
-        try:
-            book = Books.objects.get(bookname=bookname, authorname=authorname)
-            serializer = BookSerializer(book, data=request.data, partial=True)
-
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        except Books.DoesNotExist:
-            return Response("Book not found", status=status.HTTP_404_NOT_FOUND)
-
-
-# Return Issued Book
-class ReturnIshuuedBook(APIView):
+class ReturnIssuedBook(APIView):
     def delete(self, request, bookname, ishueed):
-        book = IshueedBooks.objects.filter(bookname=bookname, ishueed=ishueed).first()
-        if book:
-            book.delete()
-            return Response("Book Returned Successfully")
-        return Response("Book not found", status=status.HTTP_404_NOT_FOUND)
+        book = IssuedBooks.objects.filter(bookname=bookname, ishueed=ishueed).first()
+        if not book:
+            return Response({"error": "Issued book not found"}, status=status.HTTP_404_NOT_FOUND)
+        book.delete()
+        return Response({"message": "Book Returned Successfully"}, status=status.HTTP_204_NO_CONTENT)
 
-
-# Save Returned Book
 class SaveReturnedBook(APIView):
     def post(self, request):
-        returnedbooks = ReturnedBookSerializer(data=request.data)
+        serializer = ReturnedBookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Book marked as returned"}, status=status.HTTP_201_CREATED)
 
-        if returnedbooks.is_valid():
-            returnedbooks.save()
-            return Response("Returned", status=status.HTTP_201_CREATED)
-        return Response(returnedbooks.errors, status=status.HTTP_400_BAD_REQUEST)
+class UpdatePassword(APIView):
+    def get(self, request, name, email):
+        user = get_object_or_404(User, name=name, email=email)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
 
+    def patch(self, request, name, email):
+        user = get_object_or_404(User, name=name, email=email)
+        serializer = UserSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
-# Login User
+class UpdateQuantity(APIView):
+    def get(self, request, bookname, authorname):
+        book = get_object_or_404(Books, bookname=bookname, authorname=authorname)
+        return Response({"quantity": book.quantity})
+
+    def patch(self, request, bookname, authorname):
+        book = get_object_or_404(Books, bookname=bookname, authorname=authorname)
+        serializer = BookSerializer(book, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 class LoginUserView(APIView):
     def post(self, request):
-        email = request.data["email"]
-        password = request.data["password"]
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not email or not password:
+            return Response({"error": "Email and password are required"}, status=status.HTTP_400_BAD_REQUEST)
 
         user = User.objects.filter(email=email).first()
-
-        if user is None:
-            return Response("Data is invalid", status=status.HTTP_400_BAD_REQUEST)
-
-        if not user.check_password(password):
-            return Response('Incorrect Password', status=status.HTTP_400_BAD_REQUEST)
+        if user is None or not user.check_password(password):
+            return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
 
         payload = {
             "id": user.id,
@@ -233,43 +179,27 @@ class LoginUserView(APIView):
             "iat": datetime.datetime.utcnow(),
         }
 
-        token = jwt.encode(payload, "secret", algorithm="HS256")
+        token = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256")
 
-        response = Response()
-        response.set_cookie(key="jwt", value=token, httponly=True)
-        response.data = {"jwt": token}
-
+        response = Response({"jwt": token})
+        response.set_cookie(
+            key="jwt",
+            value=token,
+            httponly=True,
+            secure=True,
+            samesite="Lax",
+        )
         return response
 
-
-# Get User Info (Authenticated)
 class UserView(APIView):
     def get(self, request):
-        token = request.COOKIES.get("jwt")
-
-        if not token:
-            raise AuthenticationFailed("Unauthenticated", code=401)
-
-        try:
-            payload = jwt.decode(token, "secret", algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("Token expired", code=401)
-        except jwt.InvalidTokenError:
-            raise AuthenticationFailed("Invalid token", code=401)
-
-        user = User.objects.filter(id=payload["id"]).first()
-        if user is None:
-            raise AuthenticationFailed("User not found", code=401)
-
+        user = get_authenticated_user(request)
         serializer = UserSerializer(user)
         return Response(serializer.data)
 
-
-# Log Out User
-class LogOutUserView(APIView):
+class LogoutUserView(APIView):
     def post(self, request):
         response = Response()
         response.delete_cookie("jwt")
-        response.data = {"Msg": "Logout Success"}
-
+        response.data = {"message": "Logout successful"}
         return response
