@@ -3,6 +3,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthInterceptor } from '../interceptors/auth.interceptor';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -16,7 +17,7 @@ export class LoginComponent implements OnInit {
   username: any;
   password: any;
   type = '';
-
+  
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -28,6 +29,7 @@ export class LoginComponent implements OnInit {
       email: '',
       password: '',
     });
+    localStorage.clear();
   }
 
   CheckDetails() {
@@ -52,45 +54,45 @@ export class LoginComponent implements OnInit {
   Inputvalidate() {
     this.err = false;
   }
+  
+  CheckUserRoll(): Observable<any> {
+    return this.http.get('http://localhost:8000/api/user', { withCredentials: true });
+  }
 
   Submit() {
     this.username = this.form.getRawValue()['email'];
     this.password = this.form.getRawValue()['password'];
-    this.http
-      .post(
-        'http://localhost:8000/api/login',
-        {
-          email: this.username,
-          password: this.password,
-        },
-        { withCredentials: true }
-      )
-      .subscribe((res: any) => {
-        if (res == 'Data is invalid') {
+  
+    this.http.post(
+      'http://localhost:8000/api/login',
+      {
+        email: this.username,
+        password: this.password,
+      },
+      { withCredentials: true }
+    ).subscribe((res: any) => {
+      if (res == 'Data is invalid' || res == 'Incorrect Password') {
+        this.err = true;
+        this.msg = res;
+      } else {
+        AuthInterceptor.accessToken = res.token;
+        localStorage.setItem('LoggedIn', 'true');
+  
+        this.CheckUserRoll().subscribe((userRes: any) => {
+          this.type = userRes.type;
+          if (this.type == 'admin') {
+            this.router.navigate(['/dashboardA']);
+          } else if (this.type == 'student') {
+            this.router.navigate(['/dashboardS']);
+          } else {
+            this.err = true;
+            this.msg = 'Unknown user role';
+          }
+        }, error => {
           this.err = true;
-          this.msg = res;
-        } else if (res == 'Incorrect Password') {
-          this.err = true;
-          this.msg = res;
-        } else {
-          AuthInterceptor.accessToken = res.token;
-          this.CheckUserRoll();
-          localStorage.setItem('LoggedIn', 'true');
-        }
-      });
-  }
-
-  CheckUserRoll() {
-    this.http
-      .get('http://localhost:8000/api/user', { withCredentials: true })
-      .subscribe((res: any) => {
-        this.type = res.type;
-        if (this.type == 'Admin') {
-          this.router.navigate(['/dashboardA']);
-        }
-        if (this.type == 'Student') {
-          this.router.navigate(['/dashboardS']);
-        }
-      });
+          this.msg = 'Failed to fetch user role';
+        });
+      }
+    });
   }
 }
