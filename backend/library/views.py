@@ -9,16 +9,12 @@ from rest_framework import status
 from library.serializers import *
 from library.models import *
 
-# Get the secret key from environment variable
-JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-production-secret")
-
-# Helper to get authenticated user from JWT token
 def get_authenticated_user(request):
     token = request.COOKIES.get("jwt")
     if not token:
         raise AuthenticationFailed("Unauthenticated")
     try:
-        payload = jwt.decode(token, JWT_SECRET_KEY, algorithms=["HS256"])
+        payload = jwt.decode(token, "secret", algorithms=["HS256"])
     except jwt.ExpiredSignatureError:
         raise AuthenticationFailed("Token expired")
     except jwt.InvalidTokenError:
@@ -179,7 +175,7 @@ class LoginUserView(APIView):
             "iat": datetime.datetime.utcnow(),
         }
 
-        token = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256")
+        token = jwt.encode(payload, "secret", algorithm="HS256")
 
         response = Response({"jwt": token})
         response.set_cookie(
