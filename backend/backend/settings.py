@@ -11,11 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-<<<<<<< HEAD
 from .Data import Host_Name, Pass_Key
-=======
 import os
->>>>>>> 93d82b4f069abbd5e4a45a8113081eb1aba80287
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -85,18 +83,11 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-<<<<<<< HEAD
-        'NAME': 'librarymanagement',
-        "HOST": 'localhost',
-        "USER": Host_Name,
-        "PASSWORD": Pass_Key,
-=======
         'NAME': os.environ.get('DB_NAME'),
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT'),
->>>>>>> 93d82b4f069abbd5e4a45a8113081eb1aba80287
     }
 }
 
