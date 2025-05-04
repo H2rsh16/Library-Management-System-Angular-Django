@@ -53,7 +53,7 @@ const routes: Routes = [
       { path: 'returnbook', component: ReturnbookComponent },
       { path: 'showbooks', component: ShowbooksComponent },
       { path: 'showishueedofone', component: ShowishueedofoneComponent },
-      { path: '**', redirectTo: 'home', pathMatch: 'full' },
+      { path: '**', redirectTo: 'homes', pathMatch: 'full' },  
     ],
   },
   { path: 'forgotpassword', component: ForgotpasswordComponent },
@@ -61,7 +61,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { useHash: true })],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}
